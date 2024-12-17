@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  nfs-server:
+    build: .  # Build the NFS server from the Dockerfile in the current directory
+    container_name: nfs-server
+    privileged: true  # Necessary for NFS to run correctly in Docker
+    volumes:
+      - my-nfs-volume2:/mnt/jobfile-run  # Mount Docker volume to NFS shared directory
+      - ./secrets/nfs-users.txt:/mnt/secrets/nfs-users.txt:ro  # Mount NFS users secret
+    ports:
+      - "2049:2049"  # Expose NFS server port
+    command: >
+      bash -c "chmod +x /entrypoint.sh && /entrypoint.sh"  # Run entrypoint script to create users and start NFS
+    environment:
+      - NFS_DIR=/mnt/jobfile-run  # Example environment variable for NFS directory
+
+  ubuntu-client:
+    image: ubuntu:latest  # Ubuntu client image for mounting the NFS share
+    container_name: ubuntu-client
+    privileged: true  # Allow necessary permissions for mounting NFS
+    volumes:
+      - my-nfs-volume2:/mnt/jobfile-run  # Mount the same Docker volume to the client
+    command: >
+      bash -c "
+        apt-get update &&
+        apt-get install -y nfs-common &&
+        mount -t nfs nfs-server:/mnt/jobfile-run /mnt/jobfile-run &&
+        sleep 3600"  # Mount the NFS share and keep the client container running
+
+volumes:
+  my-nfs-volume2:
+    name: my-nfs-volume2  # Define the Docker volume that will be used by both server and client
+    driver: local  # Default local volume driver
