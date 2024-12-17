@@ -1,18 +1,29 @@
-# nfs
-
-
-commands to execute
+# Navigate to the project directory
 cd nfs
-make secrets
-docker build -t nfs-server .
-docker-compose up -d (to run in detached mode)
 
-to check mount 
+# Generate secrets file
+make secrets
+
+# Build the NFS server Docker image
+docker build -t nfs-server .
+
+# Start the containers
+docker-compose up -d
+
+# Access the NFS server container
 docker exec -it nfs-server bash
+
 cd /mnt/jobfile-run
+
 echo "this is nfs-test" > test.txt
 exit
 
+# Access the NFS client container and verify the file
 docker exec -it ubuntu-client bash
+
 cd /mnt/jobfile-run
-ls ( you will find the file which is created in nfs-server)
+
+ls
+
+# Stop and remove all containers
+docker-compose down -v
