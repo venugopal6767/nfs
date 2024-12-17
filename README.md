@@ -1,3 +1,10 @@
+#pre requirements to install
+docker ( sudo apt install docker.io -y)
+
+docker-compose ( sudo apt install docker-compose -y)
+
+make ( sudo apt install make)
+
 # Navigate to the project directory
 cd nfs
 
