@@ -25,5 +25,3 @@ RUN chmod +x /entrypoint.sh
 # Define the entrypoint to execute the script
 ENTRYPOINT ["/entrypoint.sh"]
 
-# Keep the container running after starting the NFS server
-CMD ["tail", "-f", "/dev/null"]
