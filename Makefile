@@ -1,4 +1,4 @@
-# Makefile to create NFS users
+# Makefile to create NFS users and directories
 
 SECRETS_DIR = ./secrets
 USER_FILE = $(SECRETS_DIR)/nfs-users.txt
