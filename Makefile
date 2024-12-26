@@ -1,11 +1,10 @@
 # Makefile to create NFS users
 
 SECRETS_DIR = ./secrets
-USER_FILE = $(SECRETS_DIR)/nfs-users.txt
+USER_FILE = ../secets.nfs.txt
 
 # List of users to create in the NFS server
-USERS = user1 user2 user3
-
+USERS = user1 user2 user
 # Create the secrets directory and the user file
 secrets:
 	@mkdir -p $(SECRETS_DIR)
