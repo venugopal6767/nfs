@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  nfs-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nfs-container
+    ports:
+      - "8000:8000"  # Expose FastAPI API
+      - "2049:2049"  # Expose NFS service
+    # environment:
+    #   - NFS_USER=nfsuser
+    #   - NFS_PASS=password
+    env_file:
+      - ./secrets_nfs.env  # Specify the path to the .env file
+    volumes:
+      - nfs-data:/mnt/jobfile-run  # Named Docker volume for shared NFS files
+
+  tester:
+    image: curlimages/curl:latest  # A lightweight image with curl pre-installed
+    container_name: tester-container
+    depends_on:
+      - nfs-service  # Ensure the NFS service starts first
+    entrypoint: [ "sleep", "infinity" ]  # Keeps the container running for testing
+    volumes:
+      - nfs-data:/mnt/jobfile-run  # Mount the same Docker volume to test access
+
+volumes:
+  nfs-data:
+    name: nfs-data
+    driver: local
