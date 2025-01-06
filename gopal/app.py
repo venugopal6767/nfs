@@ -13,7 +13,7 @@ class CreateFolderRequest(BaseModel):
     md5: str | None = None
     sha1: str | None = None
 
-@app.post("/create-folder")
+@app.post("/api/v1/create-folder")
 async def create_folder(request: CreateFolderRequest):
     folder_path = os.path.join("/mnt/jobfile-run", request.folder_name)
 
